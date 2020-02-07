@@ -83,5 +83,37 @@ namespace BooksAuthorsWinFormsLocalDB.APP
                 publishersDataGridView.DataSource = null;
             }
         }
+
+        private void showBooksReportToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var booksAuthorsReportForm = new BooksAuthorsReportForm(publishersDataGridView.CurrentCell.OwningRow.DataBoundItem as PublishingHouses);
+            booksAuthorsReportForm.ShowDialog();
+        }
+
+        private void publishersDataGridView_CellMouseDown(object sender, DataGridViewCellMouseEventArgs e)
+        {
+            if (publishersDataGridView.CurrentCell != null && e.Button == MouseButtons.Right && e.RowIndex != -1)
+            {
+                if (publishersDataGridView.CurrentCell.OwningRow.DataBoundItem as PublishingHouses != null)
+                {
+                    publishersDataGridView.ClearSelection();
+                    publishersDataGridView.Rows[e.RowIndex].Selected = true;
+                    publishersDataGridView.CurrentCell = publishersDataGridView.Rows[e.RowIndex].Cells[e.ColumnIndex];
+                }
+            }
+        }
+
+        private void publishersContextMenu_Opening(object sender, CancelEventArgs e)
+        {
+            if (publishersDataGridView.CurrentCell.OwningRow.DataBoundItem as PublishingHouses == null)
+            {
+                showBooksReportToolStripMenuItem.Enabled = false;
+            }
+
+            else
+            {
+                showBooksReportToolStripMenuItem.Enabled = true;
+            }
+        }
     }
 }

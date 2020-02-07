@@ -35,9 +35,12 @@
             this.booksDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.publishingHousesBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.booksBindingSource = new System.Windows.Forms.BindingSource(this.components);
+            this.publishersContextMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.showBooksReportToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.publishersDataGridView)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.publishingHousesBindingSource)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.booksBindingSource)).BeginInit();
+            this.publishersContextMenu.SuspendLayout();
             this.SuspendLayout();
             // 
             // publishersDataGridView
@@ -48,11 +51,14 @@
             this.idDataGridViewTextBoxColumn,
             this.nameDataGridViewTextBoxColumn,
             this.booksDataGridViewTextBoxColumn});
+            this.publishersDataGridView.ContextMenuStrip = this.publishersContextMenu;
             this.publishersDataGridView.DataSource = this.publishingHousesBindingSource;
-            this.publishersDataGridView.Location = new System.Drawing.Point(23, 13);
+            this.publishersDataGridView.Location = new System.Drawing.Point(23, 24);
+            this.publishersDataGridView.MultiSelect = false;
             this.publishersDataGridView.Name = "publishersDataGridView";
             this.publishersDataGridView.Size = new System.Drawing.Size(465, 413);
             this.publishersDataGridView.TabIndex = 0;
+            this.publishersDataGridView.CellMouseDown += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.publishersDataGridView_CellMouseDown);
             this.publishersDataGridView.CellValidated += new System.Windows.Forms.DataGridViewCellEventHandler(this.publishersDataGridView_CellValidated);
             this.publishersDataGridView.CellValidating += new System.Windows.Forms.DataGridViewCellValidatingEventHandler(this.publishersDataGridView_CellValidating);
             // 
@@ -85,6 +91,21 @@
             // 
             this.booksBindingSource.DataSource = typeof(BooksAuthorsWinFormsLocalDB.DAL.Books);
             // 
+            // publishersContextMenu
+            // 
+            this.publishersContextMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.showBooksReportToolStripMenuItem});
+            this.publishersContextMenu.Name = "publishersContextMenu";
+            this.publishersContextMenu.Size = new System.Drawing.Size(181, 48);
+            this.publishersContextMenu.Opening += new System.ComponentModel.CancelEventHandler(this.publishersContextMenu_Opening);
+            // 
+            // showBooksReportToolStripMenuItem
+            // 
+            this.showBooksReportToolStripMenuItem.Name = "showBooksReportToolStripMenuItem";
+            this.showBooksReportToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.showBooksReportToolStripMenuItem.Text = "Show Books Report";
+            this.showBooksReportToolStripMenuItem.Click += new System.EventHandler(this.showBooksReportToolStripMenuItem_Click);
+            // 
             // PublisherForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -98,6 +119,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.publishersDataGridView)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.publishingHousesBindingSource)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.booksBindingSource)).EndInit();
+            this.publishersContextMenu.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -110,5 +132,7 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn idDataGridViewTextBoxColumn;
         private System.Windows.Forms.DataGridViewTextBoxColumn nameDataGridViewTextBoxColumn;
         private System.Windows.Forms.DataGridViewTextBoxColumn booksDataGridViewTextBoxColumn;
+        private System.Windows.Forms.ContextMenuStrip publishersContextMenu;
+        private System.Windows.Forms.ToolStripMenuItem showBooksReportToolStripMenuItem;
     }
 }

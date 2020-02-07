@@ -42,6 +42,18 @@
     <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\packages\EntityFramework.6.4.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.ReportViewer.Common, Version=15.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.ReportingServices.ReportViewerControl.Winforms.150.1400.0\lib\net40\Microsoft.ReportViewer.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.ReportViewer.Design, Version=15.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.ReportingServices.ReportViewerControl.Winforms.150.1400.0\lib\net40\Microsoft.ReportViewer.Design.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.ReportViewer.WinForms, Version=15.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.ReportingServices.ReportViewerControl.Winforms.150.1400.0\lib\net40\Microsoft.ReportViewer.WinForms.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.SqlServer.Types, Version=14.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.SqlServer.Types.14.0.314.76\lib\net40\Microsoft.SqlServer.Types.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
@@ -56,11 +68,34 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AddEditAuthorForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="AddEditAuthorForm.designer.cs">
+      <DependentUpon>AddEditAuthorForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="AddEditBookForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="AddEditBookForm.designer.cs">
+      <DependentUpon>AddEditBookForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="BooksAuthorsDataSet1.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>BooksAuthorsDataSet.xsd</DependentUpon>
+    </Compile>
     <Compile Include="BooksAuthorsForm.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="BooksAuthorsForm.Designer.cs">
       <DependentUpon>BooksAuthorsForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="BooksAuthorsReportForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="BooksAuthorsReportForm.designer.cs">
+      <DependentUpon>BooksAuthorsReportForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -70,8 +105,21 @@
     <Compile Include="PublisherForm.Designer.cs">
       <DependentUpon>PublisherForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="SqlServerTypes\Loader.cs" />
+    <EmbeddedResource Include="AddEditAuthorForm.resx">
+      <DependentUpon>AddEditAuthorForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="AddEditBookForm.resx">
+      <DependentUpon>AddEditBookForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="BooksAuthorsForm.resx">
       <DependentUpon>BooksAuthorsForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="BooksAuthorsReportForm.resx">
+      <DependentUpon>BooksAuthorsReportForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="BooksReport.rdlc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -85,6 +133,17 @@
     <EmbeddedResource Include="PublisherForm.resx">
       <DependentUpon>PublisherForm.cs</DependentUpon>
     </EmbeddedResource>
+    <None Include="BooksAuthorsDataSet.xsc">
+      <DependentUpon>BooksAuthorsDataSet.xsd</DependentUpon>
+    </None>
+    <None Include="BooksAuthorsDataSet.xsd">
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>BooksAuthorsDataSet1.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="BooksAuthorsDataSet.xss">
+      <DependentUpon>BooksAuthorsDataSet.xsd</DependentUpon>
+    </None>
     <None Include="packages.config" />
     <None Include="Properties\DataSources\BooksAuthorsWinFormsLocalDB.DAL.Authors.datasource" />
     <None Include="Properties\DataSources\BooksAuthorsWinFormsLocalDB.DAL.Books.datasource" />
@@ -111,6 +170,21 @@
       <Project>{5179e499-94e3-4921-83a6-e0bc0b4cd1a9}</Project>
       <Name>BooksAuthorsWinFormsLocalDB.Services</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="SqlServerTypes\readme.htm" />
+    <Content Include="SqlServerTypes\x64\msvcr120.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="SqlServerTypes\x64\SqlServerSpatial140.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="SqlServerTypes\x86\msvcr120.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="SqlServerTypes\x86\SqlServerSpatial140.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
