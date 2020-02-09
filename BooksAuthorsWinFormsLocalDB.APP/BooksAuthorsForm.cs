@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using BooksAuthorsWinFormsLocalDB.Services;
 using BooksAuthorsWinFormsLocalDB.DAL;
+using System.Data.Entity.Infrastructure;
 
 namespace BooksAuthorsWinFormsLocalDB.APP
 {
@@ -21,6 +22,7 @@ namespace BooksAuthorsWinFormsLocalDB.APP
 
         AuthorRepository authorRepository;
         PublisherRepository publisherRepository;
+        BookRepository bookRepository;
 
         public BooksAuthorsForm()
         {
@@ -35,7 +37,7 @@ namespace BooksAuthorsWinFormsLocalDB.APP
             LoadLocalData();
             BindDataSources();
             RefreshViews();
-            saveToolStripMenuItem.Enabled = authors.Count != 0;
+            saveToolStripMenuItem.Enabled = true;
         }
 
         private void BindDataSources()
@@ -73,6 +75,7 @@ namespace BooksAuthorsWinFormsLocalDB.APP
         {
             authorRepository = new AuthorRepository();
             publisherRepository = new PublisherRepository();
+            bookRepository = new BookRepository();
         }
 
         private void booksDataGridView_DefaultValuesNeeded(object sender, DataGridViewRowEventArgs e)
@@ -168,25 +171,29 @@ namespace BooksAuthorsWinFormsLocalDB.APP
 
         private void authorsDataGridView_CellEnter(object sender, DataGridViewCellEventArgs e)
         {
+            saveToolStripMenuItem.Enabled = true;
+            booksDataGridView.AllowUserToAddRows = true;
+
             try
             {
-                if (authorsDataGridView.Rows[e.RowIndex].DataBoundItem != null)
+                if (publishers.Count == 0)
                 {
-                    booksDataGridView.AllowUserToAddRows = publishers.Count != 0;
-                    toEditAuthor = authorsDataGridView.Rows[e.RowIndex].DataBoundItem as Authors;
+                    booksDataGridView.AllowUserToAddRows = false;
+                    saveToolStripMenuItem.Enabled = false;
                 }
 
-                if (authorsDataGridView.Rows[e.RowIndex].IsNewRow)
+                else if (authorsDataGridView.Rows[e.RowIndex].DataBoundItem == null)
                 {
-                    addNewAuthorToolStripMenuItem.Enabled = false;
                     booksDataGridView.AllowUserToAddRows = false;
+                    saveToolStripMenuItem.Enabled = false;
                 }
 
                 else
                 {
-                    addNewAuthorToolStripMenuItem.Enabled = true;
                     booksDataGridView.AllowUserToAddRows = true;
+                    saveToolStripMenuItem.Enabled = true;
                 }
+                
             }
 
             catch
@@ -223,7 +230,6 @@ namespace BooksAuthorsWinFormsLocalDB.APP
                 {
                     e.Cancel = true;
                     authorsDataGridView.Rows[e.RowIndex].ErrorText = "Last Name is Required";
-
                 }
 
                 else
@@ -258,11 +264,12 @@ namespace BooksAuthorsWinFormsLocalDB.APP
                 MessageBox.Show("Saved");
             }
 
-            catch (Exception ex)
+            catch (DbUpdateException ex)
             {
                 MessageBox.Show(ex.Message);
                 authorsDataGridView.EndEdit();
                 booksDataGridView.EndEdit();
+                throw;
             }
         }
 
@@ -471,7 +478,12 @@ namespace BooksAuthorsWinFormsLocalDB.APP
 
         private void booksDataGridView_UserDeletingRow(object sender, DataGridViewRowCancelEventArgs e)
         {
-            //e.Cancel = true;
+            if (e.Row.DataBoundItem != null && (e.Row.DataBoundItem as Books).Id != 0)
+            {
+                var book = e.Row.DataBoundItem as Books;
+                bookRepository.Delete(book.Id);
+                e.Cancel = true;
+            }
         }
     }
 }

@@ -19,25 +19,14 @@ namespace BooksAuthorsWinFormsLocalDB.DAL
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Authors>()
-                .Property(e => e.FirstName)
-                .IsUnicode(false);
-
-            modelBuilder.Entity<Authors>()
-                .Property(e => e.LastName)
-                .IsUnicode(false);
-
-            modelBuilder.Entity<Authors>()
                 .HasMany(e => e.Books)
-                .WithRequired(e => e.Authors)
-                .HasForeignKey(e => e.AuthorId);
-
-            modelBuilder.Entity<Books>()
-                .Property(e => e.Title)
-                .IsUnicode(false);
+                .WithOptional(e => e.Authors)
+                .HasForeignKey(e => e.AuthorId)
+                .WillCascadeOnDelete();
 
             modelBuilder.Entity<PublishingHouses>()
                 .Property(e => e.Name)
-                .IsFixedLength();
+                .IsUnicode(false);
 
             modelBuilder.Entity<PublishingHouses>()
                 .HasMany(e => e.Books)

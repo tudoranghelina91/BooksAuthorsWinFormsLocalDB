@@ -50,6 +50,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Authors.cs.old" />
+    <None Include="Books.cs.old" />
+    <None Include="BooksAuthorsContext.cs.old" />
     <Compile Include="Authors.cs" />
     <Compile Include="Books.cs" />
     <Compile Include="BooksAuthorsContext.cs" />
