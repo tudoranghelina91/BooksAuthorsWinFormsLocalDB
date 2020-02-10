@@ -91,13 +91,13 @@ namespace BooksAuthorsWinFormsLocalDB.APP
 
         private void publishersDataGridView_CellMouseDown(object sender, DataGridViewCellMouseEventArgs e)
         {
-            if (publishersDataGridView.CurrentCell != null && e.Button == MouseButtons.Right && e.RowIndex != -1)
+            if (publishersDataGridView.CurrentCell != null && e.Button == MouseButtons.Right)
             {
                 if (publishersDataGridView.CurrentCell.OwningRow.DataBoundItem as PublishingHouses != null)
                 {
                     publishersDataGridView.ClearSelection();
                     publishersDataGridView.Rows[e.RowIndex].Selected = true;
-                    publishersDataGridView.CurrentCell = publishersDataGridView.Rows[e.RowIndex].Cells[e.ColumnIndex];
+                    publishersDataGridView.CurrentCell = publishersDataGridView.Rows[e.RowIndex].Cells["idDataGridViewTextBoxColumn"];
                 }
             }
         }

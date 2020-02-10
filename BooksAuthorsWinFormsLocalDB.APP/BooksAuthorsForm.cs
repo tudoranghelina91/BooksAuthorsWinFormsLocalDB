@@ -386,11 +386,11 @@ namespace BooksAuthorsWinFormsLocalDB.APP
         {
             if (e.Button == MouseButtons.Right)
             {
-                if (authorsDataGridView.CurrentCell.OwningRow.DataBoundItem as Authors != null && e.RowIndex != -1 && e.ColumnIndex != -1)
+                if (authorsDataGridView.CurrentCell.OwningRow.DataBoundItem as Authors != null && e.RowIndex != -1)
                 {
                     authorsDataGridView.ClearSelection();
                     authorsDataGridView.Rows[e.RowIndex].Selected = true;
-                    authorsDataGridView.CurrentCell = authorsDataGridView.Rows[e.RowIndex].Cells[e.ColumnIndex];
+                    authorsDataGridView.CurrentCell = authorsDataGridView.Rows[e.RowIndex].Cells["idDataGridViewTextBoxColumn"];
                     toEditAuthor = authorsDataGridView.Rows[e.RowIndex].DataBoundItem as Authors;
                 }
 
@@ -440,6 +440,7 @@ namespace BooksAuthorsWinFormsLocalDB.APP
                                 break;
                         }
                     }
+
                     break;
             }
         }
@@ -477,13 +478,13 @@ namespace BooksAuthorsWinFormsLocalDB.APP
 
         private void booksDataGridView_CellMouseDown(object sender, DataGridViewCellMouseEventArgs e)
         {
-            if (booksDataGridView.CurrentCell != null && e.Button == MouseButtons.Right && e.RowIndex != -1 && e.ColumnIndex != -1)
+            if (booksDataGridView.CurrentCell != null && e.Button == MouseButtons.Right && e.RowIndex != -1)
             {
                 if (booksDataGridView.CurrentCell.OwningRow.DataBoundItem as Books != null)
                 {
                     booksDataGridView.ClearSelection();
                     booksDataGridView.Rows[e.RowIndex].Selected = true;
-                    booksDataGridView.CurrentCell = booksDataGridView.Rows[e.RowIndex].Cells[e.ColumnIndex];
+                    booksDataGridView.CurrentCell = booksDataGridView.Rows[e.RowIndex].Cells["idDataGridViewTextBoxColumn1"];
                     toEditBook = booksDataGridView.Rows[e.RowIndex].DataBoundItem as Books;
                 }
             }
