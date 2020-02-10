@@ -53,14 +53,14 @@
             this.addNewAuthorToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.publishersToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.refreshToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.publisherDropdownColumn = new System.Windows.Forms.DataGridViewComboBoxColumn();
-            this.publishingHousesDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.authorsDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.authorIdDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.publisherIdDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.yearDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.titleDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.idDataGridViewTextBoxColumn1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.titleDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.yearDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.publisherIdDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.authorIdDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.authorsDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.publishingHousesDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.publisherDropdownColumn = new System.Windows.Forms.DataGridViewComboBoxColumn();
             ((System.ComponentModel.ISupportInitialize)(this.authorsDataGridView)).BeginInit();
             this.authorsMenuStrip.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.authorsBindingSource)).BeginInit();
@@ -84,7 +84,6 @@
             this.authorsDataGridView.ContextMenuStrip = this.authorsMenuStrip;
             this.authorsDataGridView.DataSource = this.authorsBindingSource;
             this.authorsDataGridView.Location = new System.Drawing.Point(12, 29);
-            this.authorsDataGridView.MultiSelect = false;
             this.authorsDataGridView.Name = "authorsDataGridView";
             this.authorsDataGridView.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.authorsDataGridView.Size = new System.Drawing.Size(494, 453);
@@ -182,7 +181,6 @@
             this.booksDataGridView.ContextMenuStrip = this.booksMenuStrip;
             this.booksDataGridView.DataSource = this.booksBindingSource;
             this.booksDataGridView.Location = new System.Drawing.Point(524, 29);
-            this.booksDataGridView.MultiSelect = false;
             this.booksDataGridView.Name = "booksDataGridView";
             this.booksDataGridView.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.booksDataGridView.Size = new System.Drawing.Size(497, 453);
@@ -192,6 +190,7 @@
             this.booksDataGridView.CellMouseDown += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.booksDataGridView_CellMouseDown);
             this.booksDataGridView.CellValidated += new System.Windows.Forms.DataGridViewCellEventHandler(this.booksDataGridView_CellValidated);
             this.booksDataGridView.CellValidating += new System.Windows.Forms.DataGridViewCellValidatingEventHandler(this.booksDataGridView_CellValidating);
+            this.booksDataGridView.CurrentCellDirtyStateChanged += new System.EventHandler(this.booksDataGridView_CurrentCellDirtyStateChanged);
             this.booksDataGridView.DataError += new System.Windows.Forms.DataGridViewDataErrorEventHandler(this.booksDataGridView_DataError);
             this.booksDataGridView.DefaultValuesNeeded += new System.Windows.Forms.DataGridViewRowEventHandler(this.booksDataGridView_DefaultValuesNeeded);
             this.booksDataGridView.RowValidated += new System.Windows.Forms.DataGridViewCellEventHandler(this.booksDataGridView_RowValidated);
@@ -285,45 +284,17 @@
             this.refreshToolStripMenuItem.Text = "Refresh";
             this.refreshToolStripMenuItem.Click += new System.EventHandler(this.refreshToolStripMenuItem_Click);
             // 
-            // publisherDropdownColumn
+            // idDataGridViewTextBoxColumn1
             // 
-            this.publisherDropdownColumn.DataPropertyName = "PublisherId";
-            this.publisherDropdownColumn.DataSource = this.publishersBindingSource;
-            this.publisherDropdownColumn.DisplayMember = "Name";
-            this.publisherDropdownColumn.HeaderText = "Publisher";
-            this.publisherDropdownColumn.Name = "publisherDropdownColumn";
-            this.publisherDropdownColumn.ValueMember = "Id";
+            this.idDataGridViewTextBoxColumn1.DataPropertyName = "Id";
+            this.idDataGridViewTextBoxColumn1.HeaderText = "Id";
+            this.idDataGridViewTextBoxColumn1.Name = "idDataGridViewTextBoxColumn1";
             // 
-            // publishingHousesDataGridViewTextBoxColumn
+            // titleDataGridViewTextBoxColumn
             // 
-            this.publishingHousesDataGridViewTextBoxColumn.DataPropertyName = "PublishingHouses";
-            this.publishingHousesDataGridViewTextBoxColumn.HeaderText = "PublishingHouses";
-            this.publishingHousesDataGridViewTextBoxColumn.Name = "publishingHousesDataGridViewTextBoxColumn";
-            this.publishingHousesDataGridViewTextBoxColumn.ReadOnly = true;
-            this.publishingHousesDataGridViewTextBoxColumn.Visible = false;
-            // 
-            // authorsDataGridViewTextBoxColumn
-            // 
-            this.authorsDataGridViewTextBoxColumn.DataPropertyName = "Authors";
-            this.authorsDataGridViewTextBoxColumn.HeaderText = "Authors";
-            this.authorsDataGridViewTextBoxColumn.Name = "authorsDataGridViewTextBoxColumn";
-            this.authorsDataGridViewTextBoxColumn.ReadOnly = true;
-            this.authorsDataGridViewTextBoxColumn.Visible = false;
-            // 
-            // authorIdDataGridViewTextBoxColumn
-            // 
-            this.authorIdDataGridViewTextBoxColumn.DataPropertyName = "AuthorId";
-            this.authorIdDataGridViewTextBoxColumn.HeaderText = "AuthorId";
-            this.authorIdDataGridViewTextBoxColumn.Name = "authorIdDataGridViewTextBoxColumn";
-            this.authorIdDataGridViewTextBoxColumn.Visible = false;
-            // 
-            // publisherIdDataGridViewTextBoxColumn
-            // 
-            this.publisherIdDataGridViewTextBoxColumn.DataPropertyName = "PublisherId";
-            this.publisherIdDataGridViewTextBoxColumn.HeaderText = "PublisherId";
-            this.publisherIdDataGridViewTextBoxColumn.Name = "publisherIdDataGridViewTextBoxColumn";
-            this.publisherIdDataGridViewTextBoxColumn.ReadOnly = true;
-            this.publisherIdDataGridViewTextBoxColumn.Visible = false;
+            this.titleDataGridViewTextBoxColumn.DataPropertyName = "Title";
+            this.titleDataGridViewTextBoxColumn.HeaderText = "Title";
+            this.titleDataGridViewTextBoxColumn.Name = "titleDataGridViewTextBoxColumn";
             // 
             // yearDataGridViewTextBoxColumn
             // 
@@ -333,17 +304,45 @@
             this.yearDataGridViewTextBoxColumn.Name = "yearDataGridViewTextBoxColumn";
             this.yearDataGridViewTextBoxColumn.ToolTipText = "yyyy";
             // 
-            // titleDataGridViewTextBoxColumn
+            // publisherIdDataGridViewTextBoxColumn
             // 
-            this.titleDataGridViewTextBoxColumn.DataPropertyName = "Title";
-            this.titleDataGridViewTextBoxColumn.HeaderText = "Title";
-            this.titleDataGridViewTextBoxColumn.Name = "titleDataGridViewTextBoxColumn";
+            this.publisherIdDataGridViewTextBoxColumn.DataPropertyName = "PublisherId";
+            this.publisherIdDataGridViewTextBoxColumn.HeaderText = "PublisherId";
+            this.publisherIdDataGridViewTextBoxColumn.Name = "publisherIdDataGridViewTextBoxColumn";
+            this.publisherIdDataGridViewTextBoxColumn.ReadOnly = true;
+            this.publisherIdDataGridViewTextBoxColumn.Visible = false;
             // 
-            // idDataGridViewTextBoxColumn1
+            // authorIdDataGridViewTextBoxColumn
             // 
-            this.idDataGridViewTextBoxColumn1.DataPropertyName = "Id";
-            this.idDataGridViewTextBoxColumn1.HeaderText = "Id";
-            this.idDataGridViewTextBoxColumn1.Name = "idDataGridViewTextBoxColumn1";
+            this.authorIdDataGridViewTextBoxColumn.DataPropertyName = "AuthorId";
+            this.authorIdDataGridViewTextBoxColumn.HeaderText = "AuthorId";
+            this.authorIdDataGridViewTextBoxColumn.Name = "authorIdDataGridViewTextBoxColumn";
+            this.authorIdDataGridViewTextBoxColumn.Visible = false;
+            // 
+            // authorsDataGridViewTextBoxColumn
+            // 
+            this.authorsDataGridViewTextBoxColumn.DataPropertyName = "Authors";
+            this.authorsDataGridViewTextBoxColumn.HeaderText = "Authors";
+            this.authorsDataGridViewTextBoxColumn.Name = "authorsDataGridViewTextBoxColumn";
+            this.authorsDataGridViewTextBoxColumn.ReadOnly = true;
+            this.authorsDataGridViewTextBoxColumn.Visible = false;
+            // 
+            // publishingHousesDataGridViewTextBoxColumn
+            // 
+            this.publishingHousesDataGridViewTextBoxColumn.DataPropertyName = "PublishingHouses";
+            this.publishingHousesDataGridViewTextBoxColumn.HeaderText = "PublishingHouses";
+            this.publishingHousesDataGridViewTextBoxColumn.Name = "publishingHousesDataGridViewTextBoxColumn";
+            this.publishingHousesDataGridViewTextBoxColumn.ReadOnly = true;
+            this.publishingHousesDataGridViewTextBoxColumn.Visible = false;
+            // 
+            // publisherDropdownColumn
+            // 
+            this.publisherDropdownColumn.DataPropertyName = "PublisherId";
+            this.publisherDropdownColumn.DataSource = this.publishersBindingSource;
+            this.publisherDropdownColumn.DisplayMember = "Name";
+            this.publisherDropdownColumn.HeaderText = "Publisher";
+            this.publisherDropdownColumn.Name = "publisherDropdownColumn";
+            this.publisherDropdownColumn.ValueMember = "Id";
             // 
             // BooksAuthorsForm
             // 

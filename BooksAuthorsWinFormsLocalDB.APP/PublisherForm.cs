@@ -32,7 +32,6 @@ namespace BooksAuthorsWinFormsLocalDB.APP
 
         private void publishersDataGridView_CellValidating(object sender, DataGridViewCellValidatingEventArgs e)
         {
-
             if (publishersDataGridView.IsCurrentCellDirty && publishersDataGridView.Columns[e.ColumnIndex].Name == "nameDataGridViewTextBoxColumn")
             {
                 if (string.IsNullOrEmpty(e.FormattedValue.ToString()))
@@ -74,8 +73,8 @@ namespace BooksAuthorsWinFormsLocalDB.APP
         {
             if (publishersDataGridView.IsCurrentCellInEditMode)
             {
-                publishersDataGridView.EndEdit();
                 e.Cancel = true;
+                publishersDataGridView.EndEdit();
             }
 
             else

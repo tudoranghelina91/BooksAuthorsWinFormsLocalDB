@@ -10,6 +10,7 @@ using System.Windows.Forms;
 using BooksAuthorsWinFormsLocalDB.Services;
 using BooksAuthorsWinFormsLocalDB.DAL;
 using System.Data.Entity.Infrastructure;
+using System.Data.Entity.Validation;
 
 namespace BooksAuthorsWinFormsLocalDB.APP
 {
@@ -37,7 +38,7 @@ namespace BooksAuthorsWinFormsLocalDB.APP
             LoadLocalData();
             BindDataSources();
             RefreshViews();
-            saveToolStripMenuItem.Enabled = true;
+            //saveToolStripMenuItem.Enabled = true;
         }
 
         private void BindDataSources()
@@ -45,7 +46,6 @@ namespace BooksAuthorsWinFormsLocalDB.APP
             publishersBindingSource.DataSource = publishers;
             authorsBindingSource.DataSource = authors;
 
-            publisherDropdownColumn.DataSource = publishersBindingSource;
             booksBindingSource.DataSource = authorsBindingSource;
             booksBindingSource.DataMember = "Books";
         }
@@ -136,7 +136,7 @@ namespace BooksAuthorsWinFormsLocalDB.APP
         {
             authorsDataGridView.Rows[e.RowIndex].ErrorText = "";
             authorsDataGridView.AllowUserToAddRows = true;
-            //saveToolStripMenuItem.Enabled = true;
+            saveToolStripMenuItem.Enabled = true;
         }
 
         private void booksDataGridView_CellValidating(object sender, DataGridViewCellValidatingEventArgs e)
@@ -179,21 +179,21 @@ namespace BooksAuthorsWinFormsLocalDB.APP
                 if (publishers.Count == 0)
                 {
                     booksDataGridView.AllowUserToAddRows = false;
-                    saveToolStripMenuItem.Enabled = false;
+                    //saveToolStripMenuItem.Enabled = false;
                 }
 
                 else if (authorsDataGridView.Rows[e.RowIndex].DataBoundItem == null)
                 {
                     booksDataGridView.AllowUserToAddRows = false;
-                    saveToolStripMenuItem.Enabled = false;
+                    //saveToolStripMenuItem.Enabled = false;
                 }
 
                 else
                 {
                     booksDataGridView.AllowUserToAddRows = true;
-                    saveToolStripMenuItem.Enabled = true;
+                    //saveToolStripMenuItem.Enabled = true;
                 }
-                
+
             }
 
             catch
@@ -213,7 +213,7 @@ namespace BooksAuthorsWinFormsLocalDB.APP
         }
 
         private void booksDataGridView_CellEndEdit(object sender, DataGridViewCellEventArgs e)
-        {
+        {   
             booksDataGridView.Rows[e.RowIndex].ErrorText = "";
         }
 
@@ -257,6 +257,45 @@ namespace BooksAuthorsWinFormsLocalDB.APP
         {
             try
             {
+                authorsDataGridView.EndEdit(DataGridViewDataErrorContexts.Commit);
+                booksDataGridView.EndEdit(DataGridViewDataErrorContexts.Commit);
+                authorRepository.Save();
+                authors = authorRepository.Reset();
+                LoadData();
+                BindDataSources();
+                RefreshViews();
+                MessageBox.Show("Saved");
+            }
+
+            catch (DbEntityValidationException ex)
+            {
+                foreach (var error in ex.EntityValidationErrors)
+                {
+                    if (error.Entry.Entity is PublishingHouses)
+                    {
+                        if ((error.Entry.Entity as PublishingHouses).Name == null)
+                        {
+                            error.Entry.State = System.Data.Entity.EntityState.Detached;
+                        }
+                    }
+
+                    else if (error.Entry.Entity is Authors)
+                    {
+                        if ((error.Entry.Entity as Authors).FirstName == null || (error.Entry.Entity as Authors).LastName == null)
+                        {
+                            error.Entry.State = System.Data.Entity.EntityState.Detached;
+                        }
+                    }
+
+                    else if (error.Entry.Entity is Books)
+                    {
+                        if ((error.Entry.Entity as Books).Title == null)
+                        {
+                            error.Entry.State = System.Data.Entity.EntityState.Detached;
+                        }
+                    }
+                }
+
                 authorRepository.Save();
                 LoadData();
                 BindDataSources();
@@ -264,12 +303,9 @@ namespace BooksAuthorsWinFormsLocalDB.APP
                 MessageBox.Show("Saved");
             }
 
-            catch (DbUpdateException ex)
+            catch (DbUpdateException)
             {
-                MessageBox.Show(ex.Message);
-                authorsDataGridView.EndEdit();
-                booksDataGridView.EndEdit();
-                throw;
+                MessageBox.Show("Please update the publishers or remove the books manually");
             }
         }
 
@@ -316,6 +352,7 @@ namespace BooksAuthorsWinFormsLocalDB.APP
         {
             var publisherForm = new PublisherForm(ref publishersBindingSource);
             publisherForm.ShowDialog();
+            booksDataGridView.AllowUserToAddRows = publishers.Count > 0;
         }
 
         private void refreshToolStripMenuItem_Click(object sender, EventArgs e)
@@ -326,7 +363,6 @@ namespace BooksAuthorsWinFormsLocalDB.APP
                 LoadData();
                 BindDataSources();
                 RefreshViews();
-                saveToolStripMenuItem.Enabled = false;
             }
 
             catch
@@ -350,35 +386,38 @@ namespace BooksAuthorsWinFormsLocalDB.APP
         {
             if (e.Button == MouseButtons.Right)
             {
-                if (authorsDataGridView.CurrentCell.OwningRow.DataBoundItem as Authors != null)
+                if (authorsDataGridView.CurrentCell.OwningRow.DataBoundItem as Authors != null && e.RowIndex != -1 && e.ColumnIndex != -1)
                 {
                     authorsDataGridView.ClearSelection();
                     authorsDataGridView.Rows[e.RowIndex].Selected = true;
                     authorsDataGridView.CurrentCell = authorsDataGridView.Rows[e.RowIndex].Cells[e.ColumnIndex];
                     toEditAuthor = authorsDataGridView.Rows[e.RowIndex].DataBoundItem as Authors;
                 }
+
+                else
+                {
+                    authorsMenuStrip.Close();
+                }
             }
         }
 
         private void addNewBookToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (toEditAuthor != null)
+            if ((authorsDataGridView.CurrentCell.OwningRow.DataBoundItem as Authors) != null && booksDataGridView.AllowUserToAddRows && !booksDataGridView.CurrentCell.OwningRow.IsNewRow)
             {
                 var book = new Books();
                 AddEditBookForm addEditBookForm = new AddEditBookForm(book, publishers);
                 addEditBookForm.ShowDialog();
                 if (addEditBookForm.DialogResult == DialogResult.OK)
                 {
-                    toEditAuthor.Books.Add(book);
+                    (authorsDataGridView.CurrentCell.OwningRow.DataBoundItem as Authors).Books.Add(book);
                 }
             }
-
-            //BindDataSources();
         }
 
         private void authorsMenuStrip_Opening(object sender, CancelEventArgs e)
         {
-            switch (toEditAuthor)
+            switch (authorsDataGridView.CurrentCell.OwningRow.DataBoundItem as Authors)
             {
                 case null:
                     authorsMenuStrip.Items[0].Enabled = false;
@@ -389,15 +428,27 @@ namespace BooksAuthorsWinFormsLocalDB.APP
                     authorsMenuStrip.Items[0].Enabled = true;
                     authorsMenuStrip.Items[1].Enabled = true;
                     authorsMenuStrip.Items[2].Enabled = true;
+                    if (booksDataGridView.CurrentCell != null && booksDataGridView.CurrentCell.OwningRow.DataBoundItem != null)
+                    {
+                        switch (booksDataGridView.CurrentCell.OwningRow.DataBoundItem as Books)
+                        {
+                            case null:
+                                authorsMenuStrip.Items[0].Enabled = false;
+                                break;
+                            default:
+                                authorsMenuStrip.Items[0].Enabled = true;
+                                break;
+                        }
+                    }
                     break;
             }
         }
 
         private void editBookToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (toEditBook != null)
+            if (booksDataGridView.CurrentCell.OwningRow.DataBoundItem as Books != null)
             {
-                AddEditBookForm addEditBookForm = new AddEditBookForm(toEditBook, publishers);
+                AddEditBookForm addEditBookForm = new AddEditBookForm(booksDataGridView.CurrentCell.OwningRow.DataBoundItem as Books, publishers);
                 addEditBookForm.ShowDialog();
                 RefreshViews();
             }
@@ -426,7 +477,7 @@ namespace BooksAuthorsWinFormsLocalDB.APP
 
         private void booksDataGridView_CellMouseDown(object sender, DataGridViewCellMouseEventArgs e)
         {
-            if (booksDataGridView.CurrentCell != null && e.Button == MouseButtons.Right && e.RowIndex != -1)
+            if (booksDataGridView.CurrentCell != null && e.Button == MouseButtons.Right && e.RowIndex != -1 && e.ColumnIndex != -1)
             {
                 if (booksDataGridView.CurrentCell.OwningRow.DataBoundItem as Books != null)
                 {
@@ -478,11 +529,25 @@ namespace BooksAuthorsWinFormsLocalDB.APP
 
         private void booksDataGridView_UserDeletingRow(object sender, DataGridViewRowCancelEventArgs e)
         {
-            if (e.Row.DataBoundItem != null && (e.Row.DataBoundItem as Books).Id != 0)
+            foreach (DataGridViewRow row in booksDataGridView.SelectedRows)
             {
-                var book = e.Row.DataBoundItem as Books;
-                bookRepository.Delete(book.Id);
-                e.Cancel = true;
+                if (row.DataBoundItem != null && (row.DataBoundItem as Books).Id != 0)
+                {
+                    var book = row.DataBoundItem as Books;
+                    booksDataGridView.Rows.Remove(row);
+                    bookRepository.Delete(book.Id);
+                    e.Cancel = true;
+                }
+            }
+
+        }
+
+        private void booksDataGridView_CurrentCellDirtyStateChanged(object sender, EventArgs e)
+        {
+            if (booksDataGridView.CurrentCell.OwningColumn.Name == "publisherDropdownColumn")
+            {
+                booksDataGridView.CommitEdit(DataGridViewDataErrorContexts.Commit);
+                (booksDataGridView.CurrentCell.OwningRow.DataBoundItem as Books).PublishingHouses = publisherRepository.GetById((booksDataGridView.CurrentCell.OwningRow.DataBoundItem as Books).PublisherId);
             }
         }
     }
